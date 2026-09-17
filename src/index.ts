@@ -3,7 +3,7 @@
  * Flexible text splitting utility for CSS animations.
  * Supports complex line breaking rules (ja: Kinsoku shori).
  *
- * @version 3.1.8
+ * @version 3.2.0
  * @author Yusuke Kamiyamane
  * @license MIT
  * @copyright Copyright (c) Yusuke Kamiyamane
@@ -49,8 +49,8 @@ export function createMojiSplitter(
     return () => {};
   }
 
-  const splitter = new MojiSplitter(root, options);
-  return () => splitter.destroy();
+  const mojiSplitter = new MojiSplitter(root, options);
+  return () => mojiSplitter.destroy();
 }
 
 // -----------------------------------------------------------------------------
@@ -99,61 +99,36 @@ class MojiSplitter {
     const children = this.#rootElement.childNodes;
     this.#fragment = new DocumentFragment();
 
-    for (let i = 0, l = children.length; i < l; i++) {
-      const child = children[i];
-
-      if (!child) {
-        continue;
-      }
-
+    for (const child of children) {
       this.#fragment.appendChild(child.cloneNode(true));
     }
 
     this.#applyNonBreakingRules();
     this.#split('word');
-    const { concatChar, noLineBreakingRules } = this.#settings;
+    const { concatChar, noInlineStyle, noLineBreakingRules } = this.#settings;
     !concatChar && !noLineBreakingRules && this.#applyLineBreakingRules('word');
     this.#split('char');
     concatChar && !noLineBreakingRules && this.#applyLineBreakingRules('char');
 
-    for (let i = 0, l = this.#charElements.length; i < l; i++) {
-      const char = this.#charElements[i];
-
-      if (!char) {
-        continue;
-      }
-
+    this.#charElements.forEach((char, i) => {
       char.setAttribute('aria-hidden', 'true');
       char.style.setProperty('--char-index', String(i));
-    }
+    });
 
-    if (!this.#settings.noInlineStyle) {
+    if (!noInlineStyle) {
       const spans = this.#fragment.querySelectorAll<HTMLElement>(
         ':is([data-word], [data-char]):not([data-whitespace])',
       );
 
-      for (let i = 0, l = spans.length; i < l; i++) {
-        const span = spans[i];
-
-        if (!span) {
-          continue;
-        }
-
+      for (const span of spans) {
         const { style } = span;
         style.setProperty('display', 'inline-block');
-        Array.from(
-          (this.#segmenter ?? new Intl.Segmenter()).segment(span.textContent),
-        ).length && style.setProperty('white-space', 'nowrap');
+        [...(this.#segmenter ?? new Intl.Segmenter()).segment(span.textContent)]
+          .length && style.setProperty('white-space', 'nowrap');
       }
     }
 
-    for (let i = 0, l = this.#wordElements.length; i < l; i++) {
-      const word = this.#wordElements[i];
-
-      if (!word) {
-        continue;
-      }
-
+    this.#wordElements.forEach((word, i) => {
       word.translate = false;
       word.style.setProperty('--word-index', String(i));
 
@@ -168,7 +143,7 @@ class MojiSplitter {
         alt.textContent = word.textContent;
         word.append(alt);
       }
-    }
+    });
 
     this.#rootElement.replaceChildren(...this.#fragment.childNodes);
     const { style } = this.#rootElement;
@@ -178,13 +153,7 @@ class MojiSplitter {
       ':scope > :not([data-word]) [data-char][data-whitespace]',
     );
 
-    for (let i = 0, l = whitespaces.length; i < l; i++) {
-      const whitespace = whitespaces[i];
-
-      if (!whitespace) {
-        continue;
-      }
-
+    for (const whitespace of whitespaces) {
       if (
         window.getComputedStyle(whitespace).getPropertyValue('display') !==
         'inline'
@@ -378,17 +347,9 @@ class MojiSplitter {
     }
 
     if (granularity === 'char') {
-      const spans = (
+      for (const span of (
         this.#fragment ?? new DocumentFragment()
-      ).querySelectorAll<HTMLElement>('[data-word]:not([data-whitespace])');
-
-      for (let i = 0, l = spans.length; i < l; i++) {
-        const span = spans[i];
-
-        if (!span) {
-          continue;
-        }
-
+      ).querySelectorAll<HTMLElement>('[data-word]:not([data-whitespace])')) {
         const text = span.textContent;
         text ? span.setAttribute('data-word', text) : span.remove();
       }
