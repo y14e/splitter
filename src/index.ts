@@ -1,19 +1,3 @@
-/**
- * Moji Splitter
- * Flexible text splitting utility for CSS animations.
- * Supports complex line breaking rules (ja: Kinsoku shori).
- *
- * @version 3.2.0
- * @author Yusuke Kamiyamane
- * @license MIT
- * @copyright Copyright (c) Yusuke Kamiyamane
- * @see {@link https://github.com/y14e/moji-splitter}
- */
-
-// -----------------------------------------------------------------------------
-// Types
-// -----------------------------------------------------------------------------
-
 export interface MojiSplitterOptions {
   concatChar: boolean;
   noInlineStyle: boolean;
@@ -23,10 +7,6 @@ export interface MojiSplitterOptions {
 
 type Granularity = 'word' | 'char';
 
-// -----------------------------------------------------------------------------
-// Constants
-// -----------------------------------------------------------------------------
-
 const NOBR_RE =
   /[[[\P{scx=Han}]&&[\P{scx=Hang}]&&[\P{scx=Hira}]&&[\P{scx=Kana}]&&[\p{L}]]!-,.->@\[-`\{-~\u00A0]+/gv;
 const LBR_PROHIBIT_START_RE =
@@ -35,10 +15,6 @@ const LBR_PROHIBIT_END_RE = /[\p{Pf}\p{Pi}\p{Ps}\p{Sc}\u00A0]$/u;
 const LBR_INSEPARATABLE_RE = /[―‥…]/u;
 const VISUALLY_HIDDEN_CSS =
   'border: 0; clip: rect(0, 0, 0, 0); height: 1px; margin: -1px; overflow: hidden; padding: 0; position: absolute; user-select: none; white-space: nowrap; width: 1px;';
-
-// -----------------------------------------------------------------------------
-// APIs
-// -----------------------------------------------------------------------------
 
 export function createMojiSplitter(
   root: HTMLElement,
@@ -52,10 +28,6 @@ export function createMojiSplitter(
   const mojiSplitter = new MojiSplitter(root, options);
   return () => mojiSplitter.destroy();
 }
-
-// -----------------------------------------------------------------------------
-// Core
-// -----------------------------------------------------------------------------
 
 class MojiSplitter {
   #rootElement: HTMLElement;
