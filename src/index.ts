@@ -1,24 +1,17 @@
-export interface MojiSplitterOptions {
-  concatChar: boolean;
-  noInlineStyle: boolean;
-  noLineBreakingRules: boolean;
-  wordSegmenter: boolean;
-}
-
-type Granularity = 'word' | 'char';
-
-const NOBR_RE =
-  /[[[\P{scx=Han}]&&[\P{scx=Hang}]&&[\P{scx=Hira}]&&[\P{scx=Kana}]&&[\p{L}]]!-,.->@\[-`\{-~\u00A0]+/gv;
-const LBR_PROHIBIT_START_RE =
-  /^[[[\p{Pd}]--[―]]\p{Pe}\p{Pf}\p{Po}\u00A0々〵〻ぁぃぅぇぉっゃゅょゎゕゖ゛-ゞァィゥェォッャュョヮヵヶー-ヾㇰ-ㇿ]|\p{Pi}/v;
-const LBR_PROHIBIT_END_RE = /[\p{Pf}\p{Pi}\p{Ps}\p{Sc}\u00A0]$/u;
-const LBR_INSEPARATABLE_RE = /[―‥…]/u;
-const VISUALLY_HIDDEN_CSS =
-  'border: 0; clip: rect(0, 0, 0, 0); height: 1px; margin: -1px; overflow: hidden; padding: 0; position: absolute; user-select: none; white-space: nowrap; width: 1px;';
+import {
+  LBR_INSEPARATABLE_RE,
+  LBR_PROHIBIT_END_RE,
+  LBR_PROHIBIT_START_RE,
+  NOBR_RE,
+  VISUALLY_HIDDEN_CSS,
+} from '@/constants';
+import { defaults } from '@/defaults';
+import { resolveOptions } from '@/options';
+import type { Granularity, MojiSplitterOptions as Options } from '@/types';
 
 export function createMojiSplitter(
   root: HTMLElement,
-  options: Partial<MojiSplitterOptions> = {},
+  options: Partial<Options> = {},
 ): () => void {
   if (!(root instanceof HTMLElement)) {
     console.warn('Invalid root element');
@@ -31,13 +24,7 @@ export function createMojiSplitter(
 
 class MojiSplitter {
   #rootElement: HTMLElement;
-  #defaults = {
-    concatChar: false,
-    noInlineStyle: false,
-    noLineBreakingRules: false,
-    wordSegmenter: false,
-  };
-  #settings: MojiSplitterOptions;
+  #settings: Options;
   #wordElements: HTMLElement[] = [];
   #charElements: HTMLElement[] = [];
   #original: string | null;
@@ -45,9 +32,9 @@ class MojiSplitter {
   #segmenter: Intl.Segmenter | null = new Intl.Segmenter();
   #isDestroyed = false;
 
-  constructor(root: HTMLElement, options: Partial<MojiSplitterOptions> = {}) {
+  constructor(root: HTMLElement, options: Partial<Options> = {}) {
     this.#rootElement = root;
-    this.#settings = this.#resolveOptions(this.#defaults, options);
+    this.#settings = resolveOptions(defaults, options);
     this.#original = this.#rootElement.innerHTML;
     this.#initialize();
   }
@@ -359,40 +346,6 @@ class MojiSplitter {
       return this.#segmenter;
     }
   }
-
-  #resolveOptions(
-    target: MojiSplitterOptions,
-    source: Partial<MojiSplitterOptions>,
-  ): MojiSplitterOptions {
-    const merged = { ...target, ...source };
-    const defaults = this.#defaults;
-
-    if (typeof merged.concatChar !== 'boolean') {
-      const concatChar = defaults.concatChar;
-      console.warn(`Invalid concatChar option. Fallback: ${concatChar}.`);
-      merged.concatChar = concatChar;
-    }
-
-    if (typeof merged.noInlineStyle !== 'boolean') {
-      const noInlineStyle = defaults.noInlineStyle;
-      console.warn(`Invalid noInlineStyle option. Fallback: ${noInlineStyle}.`);
-      merged.noInlineStyle = noInlineStyle;
-    }
-
-    if (typeof merged.noLineBreakingRules !== 'boolean') {
-      const noLineBreakingRules = defaults.noLineBreakingRules;
-      console.warn(
-        `Invalid noLineBreakingRules option. Fallback: ${noLineBreakingRules}.`,
-      );
-      merged.noLineBreakingRules = noLineBreakingRules;
-    }
-
-    if (typeof merged.wordSegmenter !== 'boolean') {
-      const wordSegmenter = defaults.wordSegmenter;
-      console.warn(`Invalid wordSegmenter option. Fallback: ${wordSegmenter}.`);
-      merged.wordSegmenter = wordSegmenter;
-    }
-
-    return merged;
-  }
 }
+
+export type { Options as MojiSplitterOptions };

@@ -13,11 +13,11 @@ npm i moji-splitter
 import { createMojiSplitter } from 'moji-splitter';
 
 // CDNs
-import { createMojiSplitter } from 'https://esm.sh/moji-splitter@3.2.1';
+import { createMojiSplitter } from 'https://esm.sh/moji-splitter@<x.x.x>';
 // or
-import { createMojiSplitter } from 'https://cdn.jsdelivr.net/npm/moji-splitter@3.2.1/dist/index.js';
+import { createMojiSplitter } from 'https://cdn.jsdelivr.net/npm/moji-splitter@<x.x.x>/dist/index.js';
 // or
-import { createMojiSplitter } from 'https://esm.unpkg.com/moji-splitter@3.2.1';
+import { createMojiSplitter } from 'https://esm.unpkg.com/moji-splitter@<x.x.x>';
 ```
 
 ## 📦 APIs
