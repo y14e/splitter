@@ -1,4 +1,4 @@
-import type { MojiSplitterOptions as Options } from '@/types';
+import type { MojiSplitterOptions as Options } from './types';
 
 export function resolveOptions(
   defaults: Options,

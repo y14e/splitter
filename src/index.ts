@@ -4,10 +4,10 @@ import {
   LBR_PROHIBIT_START_RE,
   NOBR_RE,
   VISUALLY_HIDDEN_CSS,
-} from '@/constants';
-import { defaults } from '@/defaults';
-import { resolveOptions } from '@/options';
-import type { Granularity, MojiSplitterOptions as Options } from '@/types';
+} from './constants';
+import { defaults } from './defaults';
+import { resolveOptions } from './options';
+import type { Granularity, MojiSplitterOptions as Options } from './types';
 
 export function createMojiSplitter(
   root: HTMLElement,
