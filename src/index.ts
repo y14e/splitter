@@ -5,7 +5,6 @@ import {
   NOBR_RE,
   VISUALLY_HIDDEN_CSS,
 } from './constants';
-import { defaults } from './defaults';
 import { resolveOptions } from './options';
 import type { Granularity, MojiSplitterOptions as Options } from './types';
 
@@ -34,7 +33,7 @@ class MojiSplitter {
 
   constructor(root: HTMLElement, options: Partial<Options> = {}) {
     this.#rootElement = root;
-    this.#settings = resolveOptions(defaults, options);
+    this.#settings = resolveOptions(options);
     this.#original = this.#rootElement.innerHTML;
     this.#initialize();
   }
