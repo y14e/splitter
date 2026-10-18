@@ -10,7 +10,7 @@ npm i @y14e/splitter
 
 ```ts
 // npm
-import { createSplitter } from '@y14e/moji-splitter';
+import { createSplitter } from '@y14e/splitter';
 
 // CDNs
 import { createSplitter } from 'https://esm.sh/@y14e/splitter@<x.x.x>';
