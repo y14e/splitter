@@ -44,7 +44,7 @@ class Splitter {
     }
 
     this.#isDestroyed = true;
-    this.#rootElement.removeAttribute('data-moji-splitter-initialized');
+    this.#rootElement.removeAttribute('data-splitter-initialized');
     this.#rootElement.innerHTML = this.#original ?? '';
     const style = this.#rootElement.style;
     style.removeProperty('--word-count');
@@ -121,7 +121,7 @@ class Splitter {
     }
 
     this.#cleanup();
-    this.#rootElement.setAttribute('data-moji-splitter-initialized', '');
+    this.#rootElement.setAttribute('data-splitter-initialized', '');
   }
 
   #applyNonBreakingRules(
