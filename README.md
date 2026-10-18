@@ -1,39 +1,39 @@
-# Moji Splitter
+# Splitter
 
 Flexible text splitting utility for CSS animations. Supports complex [line breaking rules](https://en.wikipedia.org/wiki/Line_breaking_rules_in_East_Asian_languages) (ja: 禁則処理).
 
 ## Install
 
 ```bash
-npm i moji-splitter
+npm i @y14e/splitter
 ```
 
 ```ts
 // npm
-import { createMojiSplitter } from 'moji-splitter';
+import { createSplitter } from '@y14e/splitter';
 
 // CDNs
-import { createMojiSplitter } from 'https://esm.sh/moji-splitter@<x.x.x>';
+import { createSplitter } from 'https://esm.sh/@y14e/splitter@<x.x.x>';
 // or
-import { createMojiSplitter } from 'https://cdn.jsdelivr.net/npm/moji-splitter@<x.x.x>/dist/index.js';
+import { createSplitter } from 'https://cdn.jsdelivr.net/npm/@y14e/splitter@<x.x.x>/dist/index.js';
 // or
-import { createMojiSplitter } from 'https://esm.unpkg.com/moji-splitter@<x.x.x>';
+import { createSplitter } from 'https://esm.unpkg.com/@y14e/splitter@<x.x.x>';
 ```
 
 ## 📦 APIs
 
 ```ts
-const cleanup = createMojiSplitter(root, options);
+const cleanup = createSplitter(root, options);
 // => () => void
 //
 // root: HTMLElement
-// options (optional): MojiSplitterOptions
+// options (optional): SplitterOptions
 ```
 
 ## 🪄 Options
 
 ```ts
-interface MojiSplitterOptions {
+interface SplitterOptions {
   concatChar: boolean;          // default: false
   noInlineStyle: boolean;       // default: false
   noLineBreakingRules: boolean; // default: false
@@ -55,5 +55,5 @@ If `true`, uses `Intl.Segmenter` with the `{ granularity: 'word' }` option; usef
 
 ## Demo
 
-- https://y14e.github.io/moji-splitter/
-- https://y14e.github.io/moji-splitter/test.html
+- https://y14e.github.io/splitter/
+- https://y14e.github.io/splitter/test.html
