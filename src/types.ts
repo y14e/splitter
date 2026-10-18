@@ -1,4 +1,4 @@
-export interface MojiSplitterOptions {
+export interface SplitterOptions {
   concatChar: boolean;
   noInlineStyle: boolean;
   noLineBreakingRules: boolean;

@@ -1,6 +1,6 @@
 {
-  "name": "moji-splitter",
-  "version": "3.3.1",
+  "name": "@y14e/splitter",
+  "version": "4.0.0",
   "description": "Flexible text splitting utility for CSS animations",
   "keywords": [
     "animation",
@@ -19,13 +19,13 @@
     "utility",
     "word"
   ],
-  "homepage": "https://github.com/y14e/moji-splitter#readme",
+  "homepage": "https://github.com/y14e/splitter#readme",
   "bugs": {
-    "url": "https://github.com/y14e/moji-splitter/issues"
+    "url": "https://github.com/y14e/splitter/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/y14e/moji-splitter.git"
+    "url": "git+https://github.com/y14e/splitter.git"
   },
   "license": "MIT",
   "author": "Yusuke Kamiyamane",

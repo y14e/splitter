@@ -1,4 +1,4 @@
-import type { MojiSplitterOptions as Options } from './types';
+import type { SplitterOptions as Options } from './types';
 
 export function resolveOptions(options: Partial<Options>): Options {
   let {

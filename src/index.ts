@@ -6,9 +6,9 @@ import {
   VISUALLY_HIDDEN_CSS,
 } from './constants';
 import { resolveOptions } from './options';
-import type { Granularity, MojiSplitterOptions as Options } from './types';
+import type { Granularity, SplitterOptions as Options } from './types';
 
-export function createMojiSplitter(
+export function createSplitter(
   root: HTMLElement,
   options: Partial<Options> = {},
 ): () => void {
@@ -17,11 +17,11 @@ export function createMojiSplitter(
     return () => {};
   }
 
-  const mojiSplitter = new MojiSplitter(root, options);
-  return () => mojiSplitter.destroy();
+  const instance = new Splitter(root, options);
+  return () => instance.destroy();
 }
 
-class MojiSplitter {
+class Splitter {
   #rootElement: HTMLElement;
   #settings: Options;
   #wordElements: HTMLElement[] = [];
@@ -347,4 +347,4 @@ class MojiSplitter {
   }
 }
 
-export type { Options as MojiSplitterOptions };
+export type { Options as SplitterOptions };
