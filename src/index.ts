@@ -70,7 +70,7 @@ class Splitter {
 
     this.#charElements.forEach((char, i) => {
       char.setAttribute('aria-hidden', 'true');
-      char.style.setProperty('--char-index', String(i));
+      char.style.setProperty('--char-index', `${i}`);
     });
 
     if (!noInlineStyle) {
@@ -88,7 +88,7 @@ class Splitter {
 
     this.#wordElements.forEach((word, i) => {
       word.translate = false;
-      word.style.setProperty('--word-index', String(i));
+      word.style.setProperty('--word-index', `${i}`);
 
       if (!word.hasAttribute('data-whitespace')) {
         const alt = document.createElement('span');
@@ -105,8 +105,8 @@ class Splitter {
 
     this.#rootElement.replaceChildren(...this.#fragment.childNodes);
     const { style } = this.#rootElement;
-    style.setProperty('--word-count', String(this.#wordElements.length));
-    style.setProperty('--char-count', String(this.#charElements.length));
+    style.setProperty('--word-count', `${this.#wordElements.length}`);
+    style.setProperty('--char-count', `${this.#charElements.length}`);
     const whitespaces = this.#rootElement.querySelectorAll<HTMLElement>(
       ':scope > :not([data-word]) [data-char][data-whitespace]',
     );
