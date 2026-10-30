@@ -28,10 +28,5 @@ export function resolveOptions(options: Partial<Options>): Options {
     wordSegmenter = false;
   }
 
-  return {
-    concatChar,
-    noInlineStyle,
-    noLineBreakingRules,
-    wordSegmenter,
-  };
+  return { concatChar, noInlineStyle, noLineBreakingRules, wordSegmenter };
 }

@@ -8,10 +8,7 @@ import {
 import { resolveOptions } from './options';
 import type { Granularity, SplitterOptions as Options } from './types';
 
-export function createSplitter(
-  root: HTMLElement,
-  options: Partial<Options> = {},
-): () => void {
+export function createSplitter(root: HTMLElement, options: Partial<Options> = {}): () => void {
   if (!(root instanceof HTMLElement)) {
     console.warn('Invalid root element');
     return () => {};
@@ -81,8 +78,8 @@ class Splitter {
       for (const span of spans) {
         const { style } = span;
         style.setProperty('display', 'inline-block');
-        [...(this.#segmenter ?? new Intl.Segmenter()).segment(span.textContent)]
-          .length && style.setProperty('white-space', 'nowrap');
+        [...(this.#segmenter ?? new Intl.Segmenter()).segment(span.textContent)].length &&
+          style.setProperty('white-space', 'nowrap');
       }
     }
 
@@ -112,10 +109,7 @@ class Splitter {
     );
 
     for (const whitespace of whitespaces) {
-      if (
-        window.getComputedStyle(whitespace).getPropertyValue('display') !==
-        'inline'
-      ) {
+      if (window.getComputedStyle(whitespace).getPropertyValue('display') !== 'inline') {
         whitespace.innerHTML = '&nbsp;';
       }
     }
@@ -124,9 +118,7 @@ class Splitter {
     this.#rootElement.setAttribute('data-splitter-initialized', '');
   }
 
-  #applyNonBreakingRules(
-    node: Node = this.#fragment ?? new DocumentFragment(),
-  ): void {
+  #applyNonBreakingRules(node: Node = this.#fragment ?? new DocumentFragment()): void {
     if (node.nodeType === Node.TEXT_NODE) {
       const text = node.textContent;
 
@@ -168,13 +160,9 @@ class Splitter {
     }
   }
 
-  #split(
-    granularity: Granularity,
-    node: Node = this.#fragment ?? new DocumentFragment(),
-  ): void {
+  #split(granularity: Granularity, node: Node = this.#fragment ?? new DocumentFragment()): void {
     let child = node.firstChild;
-    const items =
-      granularity === 'word' ? this.#wordElements : this.#charElements;
+    const items = granularity === 'word' ? this.#wordElements : this.#charElements;
 
     while (child) {
       const next = child.nextSibling;
@@ -189,9 +177,7 @@ class Splitter {
         const fragment = document.createDocumentFragment();
 
         for (const segment of segmenter.segment(
-          (child.textContent ?? '')
-            .replace(/[\r\n\t]/g, '')
-            .replace(/\s{2,}/g, ' '),
+          (child.textContent ?? '').replace(/[\r\n\t]/g, '').replace(/\s{2,}/g, ' '),
         )) {
           const span = document.createElement('span');
           const text = segment.segment;
@@ -222,8 +208,7 @@ class Splitter {
 
   #applyLineBreakingRules(granularity: Granularity): void {
     let count = 0;
-    const items =
-      granularity === 'word' ? this.#wordElements : this.#charElements;
+    const items = granularity === 'word' ? this.#wordElements : this.#charElements;
     let previous = null;
 
     while (count < items.length) {
@@ -305,9 +290,9 @@ class Splitter {
     }
 
     if (granularity === 'char') {
-      for (const span of (
-        this.#fragment ?? new DocumentFragment()
-      ).querySelectorAll<HTMLElement>('[data-word]:not([data-whitespace])')) {
+      for (const span of (this.#fragment ?? new DocumentFragment()).querySelectorAll<HTMLElement>(
+        '[data-word]:not([data-whitespace])',
+      )) {
         const text = span.textContent;
         text ? span.setAttribute('data-word', text) : span.remove();
       }
@@ -321,13 +306,9 @@ class Splitter {
     this.#segmenter = null;
   }
 
-  #getSegmenter(
-    granularity: Granularity,
-    parent: Node | null,
-  ): Intl.Segmenter | null {
+  #getSegmenter(granularity: Granularity, parent: Node | null): Intl.Segmenter | null {
     if (granularity === 'word' && this.#settings.wordSegmenter) {
-      const root =
-        parent?.nodeType === Node.ELEMENT_NODE ? parent : this.#rootElement;
+      const root = parent?.nodeType === Node.ELEMENT_NODE ? parent : this.#rootElement;
 
       if (!(root instanceof HTMLElement)) {
         return this.#segmenter;
@@ -335,12 +316,9 @@ class Splitter {
 
       const closest: HTMLElement | null = root.closest('[lang]');
 
-      return new Intl.Segmenter(
-        closest?.lang || document.documentElement.lang || 'en',
-        {
-          granularity: 'word',
-        },
-      );
+      return new Intl.Segmenter(closest?.lang || document.documentElement.lang || 'en', {
+        granularity: 'word',
+      });
     } else {
       return this.#segmenter;
     }
