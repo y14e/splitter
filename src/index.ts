@@ -8,18 +8,18 @@ import {
 import { resolveOptions } from './options';
 import type { Granularity, SplitterOptions as Options } from './types';
 
-export function createSplitter(root: HTMLElement, options: Partial<Options> = {}): () => void {
-  if (!(root instanceof HTMLElement)) {
-    console.warn('Invalid root element');
+export function createSplitter(element: HTMLElement, options: Partial<Options> = {}): () => void {
+  if (!(element instanceof HTMLElement)) {
+    console.warn('Invalid element');
     return () => {};
   }
 
-  const instance = new Splitter(root, options);
+  const instance = new Splitter(element, options);
   return () => instance.destroy();
 }
 
 class Splitter {
-  #rootElement: HTMLElement;
+  #element: HTMLElement;
   #settings: Options;
   #wordElements: HTMLElement[] = [];
   #charElements: HTMLElement[] = [];
@@ -28,10 +28,10 @@ class Splitter {
   #segmenter: Intl.Segmenter | null = new Intl.Segmenter();
   #isDestroyed = false;
 
-  constructor(root: HTMLElement, options: Partial<Options> = {}) {
-    this.#rootElement = root;
+  constructor(element: HTMLElement, options: Partial<Options> = {}) {
+    this.#element = element;
     this.#settings = resolveOptions(options);
-    this.#original = this.#rootElement.innerHTML;
+    this.#original = this.#element.innerHTML;
     this.#initialize();
   }
 
@@ -41,9 +41,9 @@ class Splitter {
     }
 
     this.#isDestroyed = true;
-    this.#rootElement.removeAttribute('data-splitter-initialized');
-    this.#rootElement.innerHTML = this.#original ?? '';
-    const style = this.#rootElement.style;
+    this.#element.removeAttribute('data-splitter-initialized');
+    this.#element.innerHTML = this.#original ?? '';
+    const style = this.#element.style;
     style.removeProperty('--word-count');
     style.removeProperty('--char-count');
     this.#cleanup();
@@ -51,7 +51,7 @@ class Splitter {
   }
 
   #initialize(): void {
-    const children = this.#rootElement.childNodes;
+    const children = this.#element.childNodes;
     this.#fragment = new DocumentFragment();
 
     for (const child of children) {
@@ -100,11 +100,11 @@ class Splitter {
       }
     });
 
-    this.#rootElement.replaceChildren(...this.#fragment.childNodes);
-    const { style } = this.#rootElement;
+    this.#element.replaceChildren(...this.#fragment.childNodes);
+    const { style } = this.#element;
     style.setProperty('--word-count', `${this.#wordElements.length}`);
     style.setProperty('--char-count', `${this.#charElements.length}`);
-    const whitespaces = this.#rootElement.querySelectorAll<HTMLElement>(
+    const whitespaces = this.#element.querySelectorAll<HTMLElement>(
       ':scope > :not([data-word]) [data-char][data-whitespace]',
     );
 
@@ -115,7 +115,7 @@ class Splitter {
     }
 
     this.#cleanup();
-    this.#rootElement.setAttribute('data-splitter-initialized', '');
+    this.#element.setAttribute('data-splitter-initialized', '');
   }
 
   #applyNonBreakingRules(node: Node = this.#fragment ?? new DocumentFragment()): void {
@@ -308,13 +308,13 @@ class Splitter {
 
   #getSegmenter(granularity: Granularity, parent: Node | null): Intl.Segmenter | null {
     if (granularity === 'word' && this.#settings.wordSegmenter) {
-      const root = parent?.nodeType === Node.ELEMENT_NODE ? parent : this.#rootElement;
+      const element = parent?.nodeType === Node.ELEMENT_NODE ? parent : this.#element;
 
-      if (!(root instanceof HTMLElement)) {
+      if (!(element instanceof HTMLElement)) {
         return this.#segmenter;
       }
 
-      const closest: HTMLElement | null = root.closest('[lang]');
+      const closest: HTMLElement | null = element.closest('[lang]');
 
       return new Intl.Segmenter(closest?.lang || document.documentElement.lang || 'en', {
         granularity: 'word',

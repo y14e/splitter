@@ -23,10 +23,10 @@ import { createSplitter } from 'https://esm.unpkg.com/@y14e/splitter@<x.x.x>';
 ## 📦 APIs
 
 ```ts
-const cleanup = createSplitter(root, options);
+const cleanup = createSplitter(element, options);
 // => () => void
 //
-// root: HTMLElement
+// element: HTMLElement
 // options (optional): SplitterOptions
 ```
 
